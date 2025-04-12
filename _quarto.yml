@@ -1,0 +1,23 @@
+project:
+  output-dir: docs
+  type: book
+  
+lang: zh
+
+book:
+  title: "C++ 笔记"
+  author: "shiyu-hong"
+  date: today
+  chapters:
+    - index.qmd
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+  pdf:
+    documentclass: book
+
+editor: visual
+

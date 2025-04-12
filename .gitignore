@@ -1,0 +1,8 @@
+# Quarto
+.quarto
+
+# RStudio
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
