@@ -19,7 +19,7 @@ book:
 format:
   html:
     theme:
-      light: minty
+      light: cosmo
       dark: darkly
   pdf:
     documentclass: book

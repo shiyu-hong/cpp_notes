@@ -4,11 +4,11 @@
 .RData
 .Ruserdata
 .quarto
+/docs/
 
 # XMake cache
 **/.xmake/
 **/build/
 
-# vscode clangd cache
+# Vscode Clangd cache
 **/.cache/
-
