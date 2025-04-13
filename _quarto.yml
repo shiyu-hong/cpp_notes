@@ -8,16 +8,34 @@ book:
   title: "C++ 笔记"
   author: "shiyu-hong"
   date: today
+  date-format: long
   chapters:
     - index.qmd
+    - preface.qmd
+    - part: "基础知识"
+      chapters: 
+        - note01-memory-management.qmd
 
 format:
   html:
     theme:
-      - cosmo
-      - brand
+      light: minty
+      dark: darkly
   pdf:
     documentclass: book
+    include-in-header: "tex/preamble.tex"
+    # 页面布局
+    classoption: 
+      - UTF8
+      - twoside
+      - openany
+      - table
+    geometry:
+      - tmargin=2.5cm
+      - bmargin=2.5cm
+      - lmargin=3.0cm
+      - rmargin=2.0cm
+    papersize: a4
 
 editor: visual
 

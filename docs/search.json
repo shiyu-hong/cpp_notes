@@ -1,0 +1,34 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "C++ 笔记",
+    "section": "",
+    "text": "欢迎",
+    "crumbs": [
+      "欢迎"
+    ]
+  },
+  {
+    "objectID": "note01-memory-management.html",
+    "href": "note01-memory-management.html",
+    "title": "1  内存管理",
+    "section": "",
+    "text": "1.1 指针",
+    "crumbs": [
+      "基础知识",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>内存管理</span>"
+    ]
+  },
+  {
+    "objectID": "note01-memory-management.html#指针",
+    "href": "note01-memory-management.html#指针",
+    "title": "1  内存管理",
+    "section": "",
+    "text": "1.1.1 野指针（Wild Pointer）\n在 C++ 中，野指针（Wild Pointer）是一种未正确初始化的指针，它指向不可预测或无效的内存地址。 操作野指针可能导致程序崩溃、数据损坏或未定义行为。\n\n1.1.1.1 野指针的常见产生场景\n\n未初始化指针\n\n#include &lt;iostream&gt;\n\n// 示例 1：未初始化指针\nvoid uninitialized_pointer() {\n  // 危险操作：未初始化指针\n  int *wild_pointer;\n  // 危险操作：尝试将数据写入未知内存，可能导致程序崩溃或数据损坏\n  *wild_pointer = 5;\n}\n\nint main(int argc, char **argv) {\n  uninitialized_pointer();\n  return 0;\n}\n\n指针越界访问\n\n#include &lt;iostream&gt;\n\n// 示例2：数组越界访问\nvoid unsafe_array_access() {\n  const int size = 5;\n  const int double_size = size * 2;\n  int array[size]{0, 1, 2, 3, 4};\n\n  // 危险操作：数组越界访问（索引 5 越界）\n  // 可能访问到无效内存，导致程序崩溃或数据损坏\n  std::cout &lt;&lt; \"危险访问：\" &lt;&lt; array[5] &lt;&lt; std::endl;\n\n  // 危险操作：数组越界访问（尝试将数据写入未知内存）\n  int *ptr = array;\n  for (auto i = 0; i &lt; double_size; ++i) {\n    // 当 i &gt;= size 时，尝试将数据写入未知内存，可能导致程序崩溃或数据损坏\n    *ptr = i;\n    ++ptr;\n  }\n}\n\nint main(int argc, char **argv) {\n  unsafe_array_access();\n  return 0;\n}\n\n\n\n1.1.2 悬空指针（Dangling Pointer）",
+    "crumbs": [
+      "基础知识",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>内存管理</span>"
+    ]
+  }
+]
