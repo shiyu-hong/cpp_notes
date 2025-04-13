@@ -76,9 +76,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-226bd0f977fa82dfae4534cac220d79a.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-0dbf563e5c34ee90c8b59b54ac56c5d7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-6c5314280c86e53d2a1a2ca4c5fd5b4a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/bootstrap/bootstrap-dark-3e8944cae38f8b3a3dda1d6989328b1c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-0dbf563e5c34ee90c8b59b54ac56c5d7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-6c5314280c86e53d2a1a2ca4c5fd5b4a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -345,10 +345,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">目录</h2>
    
   <ul>
-  <li><a href="#指针" id="toc-指针" class="nav-link active" data-scroll-target="#指针"><span class="header-section-number">1.1</span> 指针</a>
+  <li><a href="#pointer" id="toc-pointer" class="nav-link active" data-scroll-target="#pointer"><span class="header-section-number">1.1</span> 指针</a>
   <ul class="collapse">
-  <li><a href="#野指针wild-pointer" id="toc-野指针wild-pointer" class="nav-link" data-scroll-target="#野指针wild-pointer"><span class="header-section-number">1.1.1</span> 野指针（Wild Pointer）</a></li>
-  <li><a href="#悬空指针dangling-pointer" id="toc-悬空指针dangling-pointer" class="nav-link" data-scroll-target="#悬空指针dangling-pointer"><span class="header-section-number">1.1.2</span> 悬空指针（Dangling Pointer）</a></li>
+  <li><a href="#wild-pointer" id="toc-wild-pointer" class="nav-link" data-scroll-target="#wild-pointer"><span class="header-section-number">1.1.1</span> 野指针（Wild Pointer，即未初始化的指针）</a></li>
+  <li><a href="#dangling-pointer" id="toc-dangling-pointer" class="nav-link" data-scroll-target="#dangling-pointer"><span class="header-section-number">1.1.2</span> 悬空指针（Dangling Pointer，即指向已释放内存的指针）</a></li>
+  <li><a href="#memory-leak" id="toc-memory-leak" class="nav-link" data-scroll-target="#memory-leak"><span class="header-section-number">1.1.3</span> 内存泄漏（Memory Leak，即程序未正确释放已分配内存导致资源无法回收）</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -359,7 +360,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./note01-memory-management.html">基础知识</a></li><li class="breadcrumb-item"><a href="./note01-memory-management.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">内存管理</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">内存管理</span></h1>
+<h1 class="title"><span id="memory-management" class="quarto-section-identifier"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">内存管理</span></span></h1>
 </div>
 
 
@@ -376,62 +377,83 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="指针" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="指针"><span class="header-section-number">1.1</span> 指针</h2>
-<section id="野指针wild-pointer" class="level3" data-number="1.1.1">
-<h3 data-number="1.1.1" class="anchored" data-anchor-id="野指针wild-pointer"><span class="header-section-number">1.1.1</span> 野指针（Wild Pointer）</h3>
-<p>在 C++ 中，野指针（Wild Pointer）是一种未正确初始化的指针，它指向不可预测或无效的内存地址。 操作野指针可能导致程序崩溃、数据损坏或未定义行为。</p>
-<section id="野指针的常见产生场景" class="level4" data-number="1.1.1.1">
-<h4 data-number="1.1.1.1" class="anchored" data-anchor-id="野指针的常见产生场景"><span class="header-section-number">1.1.1.1</span> 野指针的常见产生场景</h4>
+<section id="pointer" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="pointer"><span class="header-section-number">1.1</span> 指针</h2>
 <ul>
-<li>未初始化指针</li>
+<li><p><strong>指针本质：</strong> 指针是一种能够存储对象内存地址的特殊变量。</p></li>
+<li><p><strong>声明方式：</strong> <code>数据类型* 指针名称;</code>（示例：<code>int* ptr;</code>）。</p></li>
+<li><p><strong>核心操作符：</strong></p>
+<ul>
+<li><p><code>&amp;</code> 取地址符号：获取变量内存地址（示例：&amp;variable）。</p></li>
+<li><p><code>*</code> 解引用符号：访问指针指向的内存数据（示例：<code>*ptr = 10;</code>）。</p></li>
+</ul></li>
+<li><p><strong>应用场景：</strong></p>
+<ul>
+<li><p><strong>动态内存管理：</strong>通过 <code>new/delete</code> 在堆空间创建/释放对象。</p></li>
+<li><p><strong>高效数据操作：</strong></p>
+<ul>
+<li><p>避免大型数据结构复制开销。</p></li>
+<li><p>支持函数指针实现灵活回调。</p></li>
+</ul></li>
+<li><p><strong>构建复杂数据结构：</strong></p>
+<ul>
+<li>实现链式存储结构（如链表、树等结构）。</li>
+</ul></li>
+</ul></li>
+<li><p><strong>注意事项：</strong></p>
+<ul>
+<li><p>野指针（Wild Pointer，即未初始化的指针）。</p></li>
+<li><p>悬空指针（Dangling Pointer，即指向已释放内存的指针）。</p></li>
+<li><p>内存泄漏（Memory Leak，即程序未正确释放已分配内存导致资源无法回收）。</p></li>
+</ul></li>
+</ul>
+<section id="wild-pointer" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="wild-pointer"><span class="header-section-number">1.1.1</span> 野指针（Wild Pointer，即未初始化的指针）</h3>
+<p>野指针（Wild Pointer）是一种未正确初始化的指针，它指向不可预测或无效的内存地址。 操作野指针可能导致程序崩溃、数据损坏或未定义行为。</p>
+<ul>
+<li><p><strong>野指针的常见产生场景：</strong></p>
+<ul>
+<li><strong>未初始化指针</strong></li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">// 示例 1：未初始化指针</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">// 示例：野指针读写双重危险演示。</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> uninitialized_pointer<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">// 危险操作：未初始化指针</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">// 警告：声明了未初始化的野指针，指向不确定的内存地址。</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> <span class="op">*</span>wild_pointer<span class="op">;</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">// 危险操作：尝试将数据写入未知内存，可能导致程序崩溃或数据损坏</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">*</span>wild_pointer <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">**</span>argv<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  uninitialized_pointer<span class="op">();</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// 高危操作：试图访问未初始化的指针。</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">// 后果：可能读取到随机内存数据，导致未定义行为。</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">// 注意：即使程序不崩溃，输出的值也可能是垃圾值。</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="op">*</span>wild_pointer <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="co">// 高危操作：尝试修改未知内存地址的内容。</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">// 后果：可能覆盖关键数据，触发段错误（Segmentation Fault）</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="co">//        或被操作系统强制终止进程（Windows 中的 ACCESS_VIOLATION）</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="op">*</span>wild_pointer <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="co">// 二次危险：继续使用已被污染的指针。</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="co">// 潜在后果：若前次写入数据程序未崩溃，可能读取到被篡改的非法值。</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="co">//            产生难以调试的“间歇性崩溃”问题。</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="op">*</span>wild_pointer <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">**</span>argv<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  uninitialized_pointer<span class="op">();</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
-<li>指针越界访问</li>
+<li><strong>指针越界访问</strong></li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">// 示例2：数组越界访问</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> unsafe_array_access<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">const</span> <span class="dt">int</span> size <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">const</span> <span class="dt">int</span> double_size <span class="op">=</span> size <span class="op">*</span> <span class="dv">2</span><span class="op">;</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> array<span class="op">[</span>size<span class="op">]{</span><span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">4</span><span class="op">};</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">// 危险操作：数组越界访问（索引 5 越界）</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">// 可能访问到无效内存，导致程序崩溃或数据损坏</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"危险访问："</span> <span class="op">&lt;&lt;</span> array<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="co">// 危险操作：数组越界访问（尝试将数据写入未知内存）</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> <span class="op">*</span>ptr <span class="op">=</span> array<span class="op">;</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="op">(</span><span class="kw">auto</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> double_size<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 当 i &gt;= size 时，尝试将数据写入未知内存，可能导致程序崩溃或数据损坏</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>ptr <span class="op">=</span> i<span class="op">;</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">++</span>ptr<span class="op">;</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">**</span>argv<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  unsafe_array_access<span class="op">();</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// </span><span class="al">TODO</span><span class="co">: write code here.</span></span></code><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
 </section>
+<section id="dangling-pointer" class="level3" data-number="1.1.2">
+<h3 data-number="1.1.2" class="anchored" data-anchor-id="dangling-pointer"><span class="header-section-number">1.1.2</span> 悬空指针（Dangling Pointer，即指向已释放内存的指针）</h3>
+
 </section>
-<section id="悬空指针dangling-pointer" class="level3" data-number="1.1.2">
-<h3 data-number="1.1.2" class="anchored" data-anchor-id="悬空指针dangling-pointer"><span class="header-section-number">1.1.2</span> 悬空指针（Dangling Pointer）</h3>
+<section id="memory-leak" class="level3" data-number="1.1.3">
+<h3 data-number="1.1.3" class="anchored" data-anchor-id="memory-leak"><span class="header-section-number">1.1.3</span> 内存泄漏（Memory Leak，即程序未正确释放已分配内存导致资源无法回收）</h3>
 
 
 </section>
