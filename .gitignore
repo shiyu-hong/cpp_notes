@@ -1,0 +1,12 @@
+# Quarto
+/.quarto/
+/.Rproj.user/
+/docs/
+
+# XMake
+**/.xmake/
+**/build/
+
+# VSCode Clangd
+**/.cache/ 
+

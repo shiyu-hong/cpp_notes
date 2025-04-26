@@ -1,0 +1,44 @@
+# ====== 项目基础配置 ======
+project:
+  lib-dir: libs     # 第三方库存放目录
+  output-dir: docs  # 编译输出目录（建议添加到 .gitignore）
+  type: book        # 项目类型：书籍
+
+lang: zh            # 全局语言设置（中文）
+
+# ====== 书籍结构配置 ======
+book:
+  title: "C++ 笔记"       # 书籍主标题
+  author: "shiyu-hong"    # 作者姓名
+  date: today             # 自动使用当前日期
+  date-format: long       # 长日期格式（示例：2025年4月26日）
+  downloads: [pdf]        # 提供 PDF 下载选项
+  chapters:               # 书籍章节结构定义
+    - "index.qmd"         # 封面/首页
+    - "intro.qmd"         # 引言章节
+    - part: "内存管理"    # 第一部分标题
+      chapters:           # 第一部分子章节
+        - "note/memory_management/pointer.qmd"
+  
+# ====== 输出格式配置 ======
+format:
+  html:
+    theme:                # HTML 主题设置
+      light: cosmo        # 浅色主题
+      dark: darkly        # 深色主题
+  pdf:
+    documentclass: book                     # LaTex 文档类型（书籍）
+    include-in-header: "tex/preamble.tex"   # 自定义 LaTex 头部
+    classoption:                            # 文档类选项
+      - UTF8                                # 字符编码
+      - openany                             # 允许章节在任意页开始                             
+      - table                               # 表格支持
+      - twoside                             # 双面排版
+    geometry:                               # 页边距设置（单位：厘米）
+      - tmargin=2.5cm                       # 上边距
+      - bmargin=2.5cm                       # 下边距
+      - lmargin=3.0cm                       # 左边距
+      - rmargin=2.0cm                       # 右边距
+    papersize: a4                           # 纸张尺寸（A4）
+
+editor: visual
