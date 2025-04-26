@@ -1,0 +1,6 @@
+{
+    "clangd.arguments": [
+        // For XMake
+        "--compile-commands-dir=.vscode",
+    ]
+}

@@ -1,0 +1,7 @@
+add_rules("mode.debug", "mode.release")
+add_rules("plugin.compile_commands.autoupdate", {outputdir = ".vscode"})
+
+target("address_and_dereference_operators")
+    set_kind("binary")
+    add_files("src/*.cpp")
+
