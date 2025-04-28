@@ -19,6 +19,9 @@ book:
     - part: "内存管理"    # 第一部分标题
       chapters:           # 第一部分子章节
         - "note/memory_management/pointer.qmd"
+    - part: "项目笔记"
+      chapters:
+        - "note/project_note/git-collaborative-development-note.qmd"
   
 # ====== 输出格式配置 ======
 format:
