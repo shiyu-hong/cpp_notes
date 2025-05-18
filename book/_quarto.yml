@@ -1,0 +1,36 @@
+project:
+  output-dir: docs
+  type: book
+  
+lang: zh
+
+book:
+  title: "C++ 笔记笔记"
+  author: "HongShiyu"
+  date: today
+  date-format: long
+  
+  chapters:
+    - index.qmd
+    - intro.qmd
+    
+    - part: "基础知识笔记"
+      chapters: 
+        - "content/fundamentals_notes/pointer.qmd"
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: superhero
+  pdf:
+    documentclass: book
+    include-in-header: "tex/preamble.tex"
+    geometry:
+      - tmargin=2.5cm
+      - bmargin=2.5cm
+      - lmargin=3.0cm
+      - rmargin=2.0cm
+
+editor: visual
+
